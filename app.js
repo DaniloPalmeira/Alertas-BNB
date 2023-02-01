@@ -5,9 +5,10 @@ dotenv.config();
 
 const { Telegraf } = require(`telegraf`);
 const { user } = require(`./user.js`);
+
 const { price_monitor } = require(`./price_monitor.js`);
-const PriceMonitor = new price_monitor();
 const bot = new Telegraf(process.env.BOT_TOKEN || ``);
+const PriceMonitor = new price_monitor(bot);
 
 const toBRL = (data) => {
     return data.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});

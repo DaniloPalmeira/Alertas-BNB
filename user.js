@@ -6,6 +6,9 @@ const user = sequelize.define('user', {
         allowNull: false,
         type: DataTypes.NUMBER
     },
+    mID: {
+        type: DataTypes.NUMBER
+    }
 }, {
     indexes: [{ unique: true, fields: ['tID'] }]
 });
