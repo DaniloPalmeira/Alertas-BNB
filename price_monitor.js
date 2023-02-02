@@ -27,6 +27,9 @@ class price_monitor{
         axios.get("https://www.binance.com/bapi/asset/v2/public/asset-service/product/get-product-by-symbol?symbol=BNBBRL")
         .then(obj => {
             this.updateValues(obj.data.data);
+        })
+        .catch(err => {
+            this.getValues();
         });
     }
 
@@ -50,17 +53,13 @@ class price_monitor{
             var users = await user.findAll();
             for (let index = 0; index < users.length; index++) {
                 const user = users[index];
-                // console.log(user.dataValues.tID);
                 var message = `💰 BNB - BRL\n\nValor atual\n|-💱: ${this.toBRL(this.current)}\n|\nUltimas 24 horas\n|-📉: ${this.toBRL(this.min)}\n|-📈: ${this.toBRL(this.max)}\n|\nVolume: ${this.toBRL(this.volumeBRL)}\nVolume BNB: ${this.volumeBNB}\n|\nÚltimos preços\n|-${this.historyEmoji.slice(-10).join(``)}\n|-${this.historyPrices.slice(-10, -5).join(` | `)}\n|-${this.historyPrices.slice(-5).join(` | `)}`
-                console.log(user.dataValues.mID);
                 if (user.dataValues.mID == null){
                     this.bot.telegram.sendMessage(user.dataValues.tID, message).then(res => {
                         user.update({mID: res.message_id}, {where: {tID: user.dataValues.tID}});
                     });
                 } else {
                     this.bot.telegram.editMessageText(user.dataValues.tID, user.dataValues.mID, null, message)
-                    .then(res => {
-                    })
                     .catch(e => {
                         user.update({mID: null}, {where: {tID: user.dataValues.tID}});
                     });
